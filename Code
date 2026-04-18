@@ -1,0 +1,99 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 5
+
+// This is the structure to store patient parameters
+struct Patient {
+    int id;
+    char name[50];
+};
+
+// This is the structure for queue
+struct Patient queue[MAX];
+int front = -1, rear = -1;
+
+// This is the function to add patients (Enqueue operation)
+void addPatient() {
+    if (rear == MAX - 1) {
+        printf("Queue is full! Cannot add more patients.\n");
+        return;
+    }
+
+    struct Patient p;
+    printf("Enter Patient ID: ");
+    scanf("%d", &p.id);
+    printf("Enter Patient Name: ");
+    scanf("%s", p.name);
+
+    if (front == -1)
+        front = 0;
+
+    rear++;
+    queue[rear] = p;
+
+    printf("Patient added successfully!\n");
+}
+
+// This is the function to treat and delete the entry of the patients (Dequeue operation)
+void treatPatients() {
+    if (front == -1 || front > rear) {
+        printf("No patients in queue.\n");
+        return;
+    }
+
+    printf("Treating Patient: ID=%d, Name=%s\n",
+           queue[front].id, queue[front].name);
+
+    front++;
+
+    if (front > rear) {
+        front = rear = -1; // Reset queue
+    }
+}
+
+// This is the function to display waiting list
+void displayPatients() {
+    if (front == -1 || front > rear) {
+        printf("No patients waiting.\n");
+        return;
+    }
+
+    printf("\nWaiting Patients List:\n");
+    for (int i = front; i <= rear; i++) {
+        printf("ID: %d, Name: %s\n", queue[i].id, queue[i].name);
+    }
+}
+
+int main() {
+    int choice;
+
+    while (1) {
+        printf("\n--- Hospital Patient Record System ---\n");
+        printf("1. Add Patient\n");
+        printf("2. Display Patient\n");
+        printf("3. Treat Patients\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addPatient();
+                break;
+            case 2:
+                displayPatients();
+                break;
+            case 3:
+                treatPatients();
+                break;
+            case 4:
+                exit(0);
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
+
+    return 0;
+}
